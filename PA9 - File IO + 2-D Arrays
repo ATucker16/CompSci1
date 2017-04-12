@@ -1,0 +1,247 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+using namespace std;
+
+void TriviaQuestions();
+
+void TTT();
+void ShowBoard();
+void SwitchTurns(int & who);
+
+const int NUMMONTHS = 4;
+const int NUMDATA = 3;
+string monthLabels[NUMMONTHS] = { "January", "February", "March", "April" };
+string dataLabels[NUMDATA] = { "Rainfall", "Avg Temp", "Avg Depth" };
+void GetData(double amounts[][NUMDATA], int numRows);
+void ShowData(double amounts[][NUMDATA], int numRows);
+
+
+int main()
+{
+    /// 1. Trivia Game: FINISHED
+    TriviaQuestions();
+
+    /// 2. Tic-Tac-Toe: IN PROGRESS
+    TTT();
+
+    /// 3. Weather Report: FINISHED
+    double monthData[NUMMONTHS][NUMDATA];
+    GetData(monthData, NUMMONTHS);
+    cout << endl;
+    cout << "=== Weather Data Report ===" << endl;
+    ShowData(monthData, NUMMONTHS);
+
+    return 0;
+}
+
+
+
+void TriviaQuestions()
+{
+    string fileName;
+    string fileText;
+    string userAnswer;
+    double numCorrect = 0.0;
+    int c = 0.0;
+
+
+
+    cout << "Please enter a file name: ";
+    cin >> fileName;
+
+    ifstream fin;
+    fin.open(fileName.c_str());
+
+    if (fin.fail() == true)
+    {
+        cout << "Error! Could not open file." << endl;
+        return;
+    }
+    else
+    {
+        cin.ignore(32768,'\n');
+
+        do
+        {
+            c++;
+
+            getline(fin, fileText);
+            cout << fileText << endl;
+
+            getline (fin, fileText);
+            getline(cin, userAnswer);
+
+            if (userAnswer == fileText)
+            {
+                cout << "Correct!" << endl;
+                numCorrect++;
+            }
+            else
+            {
+                cout << "Incorrect!" << endl;
+            }
+        }
+        while (fin.eof() == false);
+        fin.close();
+    }
+    cout << "Your score is: " << numCorrect << "/" << c << endl;
+    cout << "Percent Correct: " << (numCorrect/c)*100 << endl;
+}
+
+
+void TTT()
+{
+    const int SIZE = 3;
+    char board[SIZE][SIZE] =
+        {
+            { ' ', ' ', ' ' },
+            { ' ', ' ', ' ' },
+            { ' ', ' ', ' ' }
+        };
+
+    int pRow;
+    int pCol;
+    char whoseTurn = 'X';
+
+
+    for (int moves = 0; moves < 9; moves++)
+    {
+        cout << "=== Player " << whoseTurn << "'s Turn ===" << endl;
+
+        ///print the board
+        for (int i = 0; i < SIZE; i++)
+        {
+            for (int n = 0; n < SIZE; n++)
+            {
+                cout << board[i][n];
+            }
+            cout << endl;
+        }
+        cout << endl;
+
+
+        ///ask the current player for a row# and column#
+        cout << "Enter a row number: ";
+        cin >> pRow;
+        while (pRow > 3 || pRow < 1)
+        {
+            cout << "That is not on the board." << endl;
+            cin >> pRow;
+        }
+
+        cout << "Enter a column number: ";
+        cin >> pCol;
+        while (pCol > 3 || pCol < 1)
+        {
+            cout << "That is not on the board." << endl;
+            cin >> pCol;
+        }
+
+
+        ///input validation for already played
+        pRow--;
+        pCol--;
+
+        while (board[pRow][pCol] == 'X' || board[pRow][pCol] == 'O')
+        {
+            cout << "That square is already played." << endl;
+
+            cout << "Enter a row number: ";
+            cin >> pRow;
+            while (pRow > 3 || pRow < 1)
+            {
+                cout << "That is not on the board." << endl;
+                cin >> pRow;
+            }
+
+            cout << "Enter a column number: ";
+            cin >> pCol;
+            while (pCol > 3 || pCol < 1)
+            {
+                cout << "That is not on the board." << endl;
+                cin >> pCol;
+            }
+        }
+
+
+        ///make the move
+        board[pRow][pCol] = whoseTurn;
+        if (whoseTurn == 'X')
+        {
+            whoseTurn = 'O';
+        }
+        else
+        {
+            whoseTurn = 'X';
+        }
+    }
+
+    cout << endl;
+    cout << endl;
+
+    cout << "Your final board is:" << endl;
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int n = 0; n < SIZE; n++)
+        {
+            cout << board[i][n];
+        }
+        cout << endl;
+    }
+}
+
+
+void GetData(double amounts[][NUMDATA], int numRows)
+{
+    /// Standard 2D array loop
+    for (int r = 0; r < numRows; r++)
+    {
+        for (int c = 0; c < NUMDATA; c++)
+        {
+            cout << "What was the " << dataLabels[c];
+            cout << " in " << monthLabels[r] << "?" << endl;
+            cin >> amounts[r][c];
+        }
+        cout << endl;
+        cout << endl;
+    }
+}
+
+void ShowData(double amounts[][NUMDATA], int numRows)
+{
+    cout << setw(10) << "  ";
+
+    for (int c = 0; c < NUMDATA; c++)
+    {
+        cout << setw(15) << dataLabels[c];
+    }
+    cout << endl;
+
+    for (int r = 0; r < numRows; r++)
+    {
+        cout << left << setw(10) << monthLabels[r];
+        for (int c = 0; c < NUMDATA; c++)
+        {
+            cout << fixed << right << setprecision(2) << setw(15) << amounts[r][c];
+        }
+        cout << endl;
+    }
+
+    cout << endl;
+    cout << endl;
+
+    double rainfall = 0;
+    for (int r = 0; r < numRows; r++)
+    {
+        rainfall += amounts[r][0];
+    }
+    cout << "Total rainfall: " << rainfall << " inches" << endl;
+    cout << endl;
+
+    for (int i = 0; i < NUMMONTHS; i++)
+    {
+        cout << "Avg temp in " << monthLabels[i] << ": " << amounts[i][1];
+        cout << " deg F" << endl;
+    }
+}
