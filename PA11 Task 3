@@ -1,0 +1,123 @@
+#include <iostream>
+#include <vector>
+#include <ctime>
+#include <cstdlib>
+#include <cmath>
+#include "lpcgraphics.h"
+using namespace std;
+
+void Task1();
+void Task2();
+void Task3();
+
+struct Planet
+{
+    int x;
+    int y;
+    int radius;
+    Color c;
+};
+void Setup(Planet & p);
+void DrawPlanet(Planet & p, GraphicsWindow & w);
+double Distance(int x1, int y1, int x2, int y2);
+Color black(0, 0, 0);
+
+int main()
+{
+    while (true)
+    {
+        char userChoice;
+
+        cout << endl;
+        cout << "What do you want to do? ('z' to stop)" << endl;
+        cout << "(D) Student Database   (B) Bunnies!    (P) Planet Game" << endl;
+        cin >> userChoice;
+        if(userChoice == 'z')
+        {
+            break;
+        }
+        switch (userChoice)
+        {
+        case 'd':
+        case 'D':
+            {
+                Task1();
+                break;
+            }
+        case 'b':
+        case 'B':
+            {
+                Task2();
+                break;
+            }
+        case 'p':
+        case 'P':
+            {
+                Task3();
+                break;
+            }
+        default:
+            cout << "That is not an option" << endl;
+        }
+    }
+}
+
+void Task3()
+{
+    GraphicsWindow pW(800, 600, "Planet Game");
+    Planet galaxy[10];
+    srand(time(0));
+    int clicks = 0;
+
+    for (int i = 0; i < 10; i++)
+    {
+        Setup(galaxy[i]);
+    }
+
+    while (clicks < 10)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            DrawPlanet(galaxy[i], pW);
+            pW.Refresh();
+        }
+
+        pW.WaitForMouseUp();
+        pW.WaitForMouseDown();
+
+        for (int i = 0; i < 10; i++)
+        {
+            if(Distance(pW.MouseX(), pW.MouseY(), galaxy[i].x, galaxy[i].y) < galaxy[i].radius)
+            {
+                galaxy[i].c = black;
+                DrawPlanet(galaxy[i], pW);
+                galaxy[i].radius = 0;
+                pW.Refresh();
+                clicks++;
+            }
+        }
+    }
+
+    pW.DrawString("LEVEL COMPLETE", 200, 300, Color(255, 255, 255), 50);
+    pW.Refresh();
+    pW.Pause(2.0);
+
+}
+
+void Setup(Planet & p)
+{
+    p.x = rand()%761 + 30;
+    p.y = rand()%561 + 30;
+    p.radius= rand()%50 + 30;
+    p.c = Color(rand()%256, rand()%256, rand()%256);
+}
+
+void DrawPlanet(Planet & p, GraphicsWindow & w)
+{
+    w.DrawCircle(p.x, p.y, p.radius, p.c, true);
+}
+
+double Distance(int x1, int y1, int x2, int y2)
+{
+  return (sqrt(pow(x1-x2, 2.0) + pow(y1-y2, 2.0)));
+}
