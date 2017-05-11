@@ -1,0 +1,233 @@
+#include <iostream>
+#include <vector>
+#include <ctime>
+#include <cstdlib>
+#include <cmath>
+#include <cctype>
+#include "lpcgraphics.h"
+using namespace std;
+
+GraphicsWindow w(800, 600, "Wordbot");
+Color white(255, 255, 255);
+Color black(0, 0, 0);
+Color grey(173, 173, 173);
+int x = 610;
+int y = 10;
+int numGuesses = 8;
+string currentPhrase = "";
+string secretPhrase = "";
+
+string GetPhrase();
+string Dashify(string str);
+void DrawGuesses(int guessesLeft);
+void DrawWrongs(string letters);
+void DrawCurrentPhrase();
+void DrawRobot(int numPieces);
+bool AlreadyGuessed(char c, string & guessed);
+void CorrectLetters(string let, int & nGuess);
+
+int main ()
+{
+    string lettersGuessed;
+    string userGuess;
+    bool playerWin = false;
+    secretPhrase = GetPhrase();
+
+    for (int i = 0; i < 50; i++)
+    {
+        cout << endl;
+    }
+
+    currentPhrase = Dashify(secretPhrase);
+
+    do
+    {
+        DrawGuesses(numGuesses);
+        cout << "Guess a letter: ";
+        cin >> userGuess;
+        userGuess = toupper(userGuess[0]);
+
+        if (userGuess.length() > 1) ///more than one letter
+        {
+            cout << "Invalid. ";
+            continue;
+        }
+        else if (isalpha(userGuess[0]) == 0) ///not of the alphabet
+        {
+            cout << "Invalid. ";
+            continue;
+        }
+
+        if (AlreadyGuessed(userGuess[0], lettersGuessed) == true)
+        {
+            cout << "Already used. ";
+            continue;
+        }
+        else
+        {
+
+            CorrectLetters(userGuess, numGuesses);
+            DrawGuesses(numGuesses);
+            DrawCurrentPhrase();
+        }
+
+        DrawRobot(numGuesses);
+        w.Refresh();
+
+        if (currentPhrase == secretPhrase)
+        {
+            playerWin = true;
+        }
+    }
+    while(numGuesses > 0 && playerWin == false);
+
+
+    if (playerWin == true)
+    {
+        cout << "You Win!" << endl;
+        w.DrawString("You Win!", 50, 300, white, 50);
+        w.Refresh();
+    }
+    else
+    {
+        cout << "You Lose!" << endl;
+        w.DrawString("You Lose!", 50, 300, white, 50);
+        w.Refresh();
+    }
+    w.WaitForKeyPress();
+}
+
+string GetPhrase()
+{
+    string userPhrase;
+    cout << "Please enter your initial phrase and then pass it over to your opponent when finished." << endl;
+    getline(cin, userPhrase);
+
+    for(int i = 0; i < userPhrase.length(); i++)
+    {
+        userPhrase[i] = toupper(userPhrase[i]);
+    }
+    return userPhrase;
+}
+
+string Dashify(string str)
+{
+    for(int n = 0; n < str.length(); n++)
+    {
+        if(isalpha(str[n]))
+        {
+            str[n] = '-';
+        }
+    }
+    return str;
+}
+
+void DrawGuesses(int guessesLeft)
+{
+    w.DrawRectangle(110, 10, 31, 31, black, true);
+    w.DrawString("Guesses: ", 10, 10, white, 30);
+    w.DrawString("Letters Guessed: ", 400, 10, white, 30);
+    w.DrawString(IntToString(guessesLeft), 110, 10, white, 30);
+    w.Refresh();
+}
+
+void DrawWrongs(string letters)
+{
+    w.DrawString(letters, x, y, white, 30);
+    x += 40;
+    if (x > 790)
+    {
+        y += 50;
+        x = 610;
+    }
+    w.Refresh();
+}
+
+void DrawCurrentPhrase()
+{
+    w.DrawRectangle(300, 540, 500, 60, black, true);
+    w.DrawString(currentPhrase, 300, 540, white, 50);
+}
+
+void DrawRobot(int numPieces)
+{
+    int centerSymm = 400;
+
+    if(numPieces == 7) ///head, eyes, mouth
+    {
+        w.DrawRectangle(350, 90, 100, 100, grey, true); ///head
+        w.DrawCircle(centerSymm-25, 120, 15, black, true); ///left eye
+        w.DrawCircle(centerSymm+25, 120, 15, black, true); ///right eye
+        w.DrawLine(centerSymm-25, 170, centerSymm+25, 170, black); ///mouth
+    }
+    else if(numPieces == 6) ///neck, torso
+    {
+        w.DrawRectangle(centerSymm-20, 190, 40, 20, grey, true); ///neck
+        w.DrawRectangle(centerSymm-70, 210, 140, 160, grey, true); ///torso
+    }
+    else if(numPieces == 5) ///left leg, left foot
+    {
+        w.DrawRectangle(centerSymm-70, 370, 60, 100, grey, true); ///left leg
+        w.DrawRectangle(centerSymm-75, 470, 70, 40, grey, true); ///left foot
+    }
+    else if(numPieces == 4) ///right leg, right foot
+    {
+        w.DrawRectangle(centerSymm+10, 370, 60, 100, grey, true); ///right leg
+        w.DrawRectangle(centerSymm+5, 470, 70, 40, grey, true); ///right foot
+    }
+    else if(numPieces == 3) ///left shoulder, left arm
+    {
+        w.DrawRectangle(centerSymm-120, 210, 60, 60, grey, true); ///left shoulder
+        w.DrawRectangle(centerSymm-120, 210, 40, 120, grey, true); ///left arm
+    }
+    else if(numPieces == 2) ///right shoulder, right arm
+    {
+        w.DrawRectangle(centerSymm+60, 210, 60, 60, grey, true); ///right shoulder
+        w.DrawRectangle(centerSymm+80, 210, 40, 120, grey, true); ///right arm
+    }
+    else if(numPieces == 1) ///left hand
+    {
+        w.DrawRectangle(centerSymm-125, 330, 50, 50, grey, true);
+    }
+    else if(numPieces == 0) ///right hand
+    {
+        w.DrawRectangle(centerSymm+75, 330, 50, 50, grey, true);
+    }
+}
+
+bool AlreadyGuessed(char c, string & guessed)
+{
+    for (int i = 0; i < guessed.length(); i++)
+    {
+        if (c == guessed[i])
+        {
+            return true;
+        }
+    }
+    guessed += c;
+    return false;
+}
+
+void CorrectLetters(string let, int & nGuess)
+{
+    bool inPhrase = false;
+    let = let[0];
+    for(int i = 0; i < secretPhrase.length(); i++)
+    {
+        if(let[0] == secretPhrase[i])
+        {
+            currentPhrase[i] = let[0];
+            inPhrase = true;
+        }
+    }
+    if(inPhrase == true)
+    {
+        cout << "The letter is in the phrase!" << endl;
+    }
+    else if(inPhrase == false)
+    {
+        cout << "The letter is NOT in the phrase!" << endl;
+        DrawWrongs(let);
+        nGuess--;
+    }
+}
