@@ -1,0 +1,79 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+bool ProcessOneWord(string sen);
+void ProcessAll(vector<string> words);
+
+int main()
+{
+    string sentence;
+    while (true)
+    {
+        cout << "Enter a sentence: ";
+        getline(cin, sentence);
+        if (sentence == "")
+        {
+            break;
+        }
+        else
+        {
+            ProcessAll(DivideIntoWords(sentence));
+        }
+
+    }
+    return 0;
+}
+
+bool ProcessOneWord(string sen)
+{
+    if (sen.substr(0,2) == "at" || sen.substr(0,2) == "At")
+    {
+        cout << "@";
+        return true;
+    }
+    return false;
+}
+
+void ProcessAll(vector<string> words)
+{
+    for (int n = 0; n < words.size(); n++)
+    {
+        bool atYes = ProcessOneWord(words[n]);
+        if (atYes == false)
+        {
+            for (int r = 0; r < words[n].length(); r++)
+            {
+                if (words[n][r] == 'a' || words[n][r] == 'e' || words[n][r] == 'i'
+                    || words[n][r] == 'o' || words[n][r] == 'u')
+                {
+                    continue;
+                }
+                else
+                {
+                    cout << words[n][r];
+                }
+            }
+        }
+        else if (atYes == true)
+        {
+            int s = 0;
+            s += 2;
+            for (s; s < words[n].length(); s++)
+            {
+                if (words[n][s] == 'a' || words[n][s] == 'e' || words[n][s] == 'i'
+                    || words[n][s] == 'o' || words[n][s] == 'u')
+                {
+                    continue;
+                }
+                else
+                {
+                    cout << words[n][s];
+                }
+            }
+        }
+    }
+}
+
+
+
