@@ -1,0 +1,118 @@
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+int main()
+{
+    const int SIZE = 10;
+    double prices [SIZE];
+    double total = 0.0;
+
+    cout << "Please enter " << SIZE << " prices." << endl;
+    for (int i = 0; i < SIZE; i++)
+    {
+        cout << "Price #" << (i+1) << ": $";
+        cin >> prices [i];
+        total += prices[i];
+    }
+    cout << endl;
+
+    cout << "Here are the prices you entered:" << endl;
+    for (int n = 0; n < SIZE; n++)
+    {
+        cout << prices [n] << endl;
+    }
+    cout << "Your total is: $" << total << endl;
+    cout << "The average is: $" << total / 10.0 << endl;
+//    for (int x = 1; x <= 10; x++)
+//    {
+//        for (int y = 1; y <= 10; y++)
+//        {
+//            cout << left << setw(4) << (x*y);
+//        }
+//        cout << endl;
+//    }
+//
+//    for (int row = 0; row < 6; row++)
+//    {
+//        for (int col = 0; col < 10; col++)
+//        {
+//            cout << "*";
+//        }
+//        cout << endl;
+//    }
+//    cout << endl;
+//
+//    double userPrice = 0.0;
+//    double total = 0.0;
+//
+//    cout << "Enter up to 10 prices:" << endl;
+//    for (int priceNumber = 1; priceNumber <= 10; priceNumber++)
+//    {
+//        cout << "Price " << priceNumber << ": $";
+//        cin >> userPrice;
+//        if (userPrice < 0)
+//        {
+//            cout << "Negative numbers are invalid." << endl;
+//            userPrice--;
+//            continue;
+//        }
+//        if (userPrice == 0)
+//        {
+//            break;
+//        }
+//        total += userPrice;
+//    }
+//    cout << "$" << total << endl;
+
+
+    return 0;
+}
+//    my first life was so boring just forget i mentioned it
+//    and my second seemed to let me do all of the things my first life didn't
+//    third life was a hateful man all poison to the bone
+//    in my fourth i played piano but just didn't have the eyes to read the notes
+//
+//    in my fifth life i supported girls- of course that wasn't all
+//    my sixth life was corrupted though i guess it was a little fun
+//    seventh life i cried so much and all i did was mourn
+//    in my eighth life, was so rich i could have bought the world and everything
+//
+//    in this life is a game played by a flaky god
+//    he gambles every life
+//    try to escape but you know the path you're on is game and set
+//
+//    see how the the game of life is playing all of us for fools
+//    dancing a string around us making all these silly rules
+//    see how he looks down on us like acting out a show
+//    throw the dice and let's see which head will roll
+//
+//    by nine i drew some manga but the deadlines left me dead
+//    my tenth life was a teacher, as a pedo**** ... i worked part time
+//    next life, what eleven? sorry i try to forget
+//    never could describe how awful, no i'm terrified to think of
+//    all the things that such a die can do, kinda crazy
+//    describing everyday
+//    try to escape but the days repeat and keep you here to stay
+//
+//    see how the game of life is never won you only play
+//    bore him and you will find you're crumpled up and thrown away
+//    clinging to fate and blaming it when life won't go your way
+//    such a laugh, HA! life is just a game
+//
+//    cry out all your eyes and win a new fortune
+//    the chance is one out of six
+//    try to escape, why not try your luck and see what you may get?
+//
+//    see how the the game of life is playing all of us for fools
+//    dancing a string around us making all these silly rules
+//    see how he looks down on us like acting out a show
+//    throw the dice and let's see which head will roll
+//
+//    sickly grinning downwards, tosses out a pair of dice
+//    cheating a way around the board, ah this is paradise
+//    people praying on their knees but no one there to hear
+//    ah look down at all the puppets here
+//
+//    ...ah look up at all the puppeteers...
