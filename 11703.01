@@ -1,0 +1,106 @@
+#include <iostream>
+
+using namespace std;
+
+//function DEFINITION ("recipe", "instructions")
+void MPG (double mi, double gal)
+{
+    cout << "Gas mileage: " << (mi / gal) << endl;
+}
+
+void ReportGrade(string s, double g)
+{
+    while (g < 0 || g > 100)
+    {
+        cout << "That score is impossible without extra credit." << endl;
+        cout << "Please input a valid score." << endl;
+        cin >> g;
+    }
+
+    cout << s << "'s grade is ";
+    if (g >= 90)
+    {
+        cout << "A" << endl;
+    }
+    else if (g >= 80 && g < 90)
+    {
+        cout << "B" << endl;
+    }
+    else if (g >= 70 && g < 80)
+    {
+        cout << "C" << endl;
+    }
+    else if (g > 50 && g < 70)
+    {
+        cout << "D" << endl;
+    }
+    else if (g == 0 && g <= 50)
+    {
+        cout << "F" << endl;
+    }
+}
+
+
+int main()
+{
+    double userMiles;
+    double userGallons;
+    string studentName;
+    double studentScore;
+
+    cout << "How many miles did you drive on your last tank?  ";
+    cin >> userMiles;
+    cout << "How many gallons did it take to fill it?  ";
+    cin >> userGallons;
+    cin.ignore(32768, '\n');
+
+    MPG(userMiles, userGallons);
+
+
+    cout << "Enter a students name:  ";
+    getline (cin, studentName);
+    cout << "What is their score?  ";
+    cin >> studentScore;
+
+    ReportGrade(studentName, studentScore);
+
+
+
+
+
+//    const int SIZE = 5;
+//    int y = 0;
+//    string questions[SIZE] = {"When did Rick go to jail?", "What was Rick's band name?", "What is the best arcade in the universe?",
+//                "Who considered Rick his father and died for him so he could get high?", "What does wubba lubba dub dub mean?"};
+//    string answers[SIZE] = {"10/4/15", "The Flesh Curtains", "Blips and Chitz", "Abradolf Lincler", "Help I'm in great pain"};
+//    string userAnswers[SIZE];
+//
+//    cout << "The Rick Quiz:" << endl;
+//
+//    for (int i = 0; i < 5; i++)
+//    {
+//        cout << questions[i] << endl;
+//        getline (cin, userAnswers[i]);
+//
+//        if (userAnswers[i] == answers[i])
+//        {
+//            cout << "Correct." << endl;
+//            y++;
+//        }
+//        else if (userAnswers[i] != answers[i])
+//        {
+//            cout << "Wrong." << endl;
+//        }
+//    }
+//    cout << "Final Score: " << y << endl;
+//
+//    if (y == 5)
+//    {
+//        cout << "How sad do you have to be to answer all of these correctly?" << endl;
+//    }
+//    else if (y < 5)
+//    {
+//        cout << "Pay attention next time, M-Morty." << endl;
+//    }
+    return 0;
+}
